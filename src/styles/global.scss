@@ -1,0 +1,58 @@
+
+@use "index" as *; 
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%; 
+  margin: 0;
+}
+
+body {
+  font-family: $font-main;
+  background-color: $color-light;
+  color: $color-dark;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
+header, footer {
+  background-color: $color-dark;
+  color: white;
+  padding: 1rem;
+}
+
+nav {
+  @include flex-center;
+  gap: 1rem;
+
+  a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    &:hover {
+      color: $color-secondary;
+    }
+  }
+
+  @include respond(sm) {
+    flex-direction: column;
+  }
+}
+
+main {
+  padding: 2rem;
+  flex: 1;
+}
+
+
+
+
