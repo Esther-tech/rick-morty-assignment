@@ -11,49 +11,71 @@
 .grid {
   display: grid;
   gap: 1.5rem;
+  grid-template-columns: 1fr; // mobile
+  grid-auto-rows: auto;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
 
-  // bp sm: 2 kolommen
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-
-  @include respond(md) {
-    // bp md
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+   @media (min-width: 480px) and (max-width: 767px) {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 
-  @include respond(lg) {
-    // bp lg
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  @include respond(md) {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-auto-rows: minmax(200px, auto); //desktop
   }
 }
 
 .card {
-  background-color: white;
+  display: flex;
+  flex-direction: column; // desktop default
+  align-items: center;
+  background: white;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: transform 0.2s ease;
 
-  &:hover {
-    transform: scale(105%)
+  &:hover { 
+    transform: scale(105%); 
   }
 
   img {
     width: 100%;
-    height: auto;
+    height: 200px;     
+    object-fit: cover;
     display: block;
+    background-color: #eee;
   }
 
-  h3 {
-    margin: 0.5rem;
-    font-size: 1rem;
-    color: $color-dark;
+  .card-content {
+    width: 100%;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h3, p { margin: 0.25rem 0; text-align: center; }
   }
 
-  p {
-    margin: 0.5rem;
-    font-size: 0.85rem;
-    color: #555;
+  // mobile: row-layout
+  @include respond(sm) {
+    flex-direction: row;
+    align-items: flex-start;
+
+    img {
+      width: 40%;
+      height: auto; 
+      max-height: 120px; 
+      margin-right: 0.5rem;
+    }
+
+    .card-content {
+      width: 60%;
+      align-items: flex-start;
+      h3, p { text-align: left; }
+    }
   }
 
   .statusText {
