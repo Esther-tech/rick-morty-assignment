@@ -11,8 +11,21 @@ type ApiResponse = {
   results: Location[];
 };
 
-export async function fetchLocations(page = 1): Promise<ApiResponse> {
-  const url = `https://rickandmortyapi.com/api/location?page=${page}`;
+export async function fetchLocations(
+  page = 1,
+  filters?: Record<string, string>
+): Promise<ApiResponse> {
+  let url = `https://rickandmortyapi.com/api/location?page=${page}`;
+
+  if (filters) {
+    const queryParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(filters)) {
+      if (value) queryParams.append(key, value);
+    }
+    const queryString = queryParams.toString();
+    if (queryString) url += `&${queryString}`;
+  }
+
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch locations: ${res.status}`);

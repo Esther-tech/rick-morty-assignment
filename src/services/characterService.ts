@@ -14,8 +14,20 @@ type ApiResponse = {
   results: Character[];
 };
 
-export async function fetchCharacters(page = 1): Promise<ApiResponse> {
-  const url = `https://rickandmortyapi.com/api/character?page=${page}`;
+export async function fetchCharacters(
+  page: number,
+  filters?: Record<string, string>
+): Promise<ApiResponse> {
+  let url = `https://rickandmortyapi.com/api/character?page=${page}`;
+
+  if (filters) {
+    const queryParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(filters)) {
+      if (value) queryParams.append(key, value);
+    }
+    const queryString = queryParams.toString();
+    if (queryString) url += `&${queryString}`;
+  }
 
   const res = await fetch(url);
   if (!res.ok) {

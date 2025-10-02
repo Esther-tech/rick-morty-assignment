@@ -5,13 +5,25 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Pagination from "../components/Pagination";
 import Modal from "../components/Modal";
 import { mapCharacterToCard } from "../utils/mapToCardData";
+import { characterFilterConfigs } from "../utils/filterConfig";
+import Filters from "../components/Filters";
 
 export default function CharactersPage() {
   const [page, setPage] = useState(1);
-  const { characters, totalPages, loading, error } = useCharacters(page);
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const { characters, totalPages, loading, error } = useCharacters(
+    page,
+    filters
+  );
+  const [showFilters, setShowFilters] = useState(false);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const { character, loading: detailLoading } = useCharacter(selectedId);
+
+  const handleFilterApply = (newFilters: Record<string, string>) => {
+    setFilters(newFilters);
+    setPage(1);
+  };
 
   return (
     <div className="page">
@@ -19,6 +31,16 @@ export default function CharactersPage() {
 
       {loading && <LoadingSpinner />}
       {error && <p className="error">{error}</p>}
+
+      <button
+        className="btn btn-toggle-filters"
+        onClick={() => setShowFilters((prev) => !prev)}
+      >
+        {showFilters ? "Hide Filters" : "Show Filters"}
+      </button>
+      {showFilters && (
+        <Filters configs={characterFilterConfigs} onApply={handleFilterApply} />
+      )}
 
       <div className="grid">
         {characters.map((c) => (

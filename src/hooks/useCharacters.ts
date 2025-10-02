@@ -5,7 +5,7 @@ import {
   type Character,
 } from "../services/characterService";
 
-export function useCharacters(page: number, status?: string, species?: string) {
+export function useCharacters(page: number, filters?: Record<string, string>) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export function useCharacters(page: number, status?: string, species?: string) {
     setLoading(true);
     setError(null);
 
-    fetchCharacters(page)
+    fetchCharacters(page, filters)
       .then((data) => {
         if (active) {
           setCharacters(data.results);
@@ -33,7 +33,7 @@ export function useCharacters(page: number, status?: string, species?: string) {
     return () => {
       active = false;
     };
-  }, [page, status, species]);
+  }, [page, filters]);
 
   return { characters, totalPages, loading, error };
 }

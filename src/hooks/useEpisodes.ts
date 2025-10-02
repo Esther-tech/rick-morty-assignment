@@ -5,7 +5,7 @@ import {
   type Episode,
 } from "../services/episodeService";
 
-export function useEpisodes() {
+export function useEpisodes(filters?: Record<string, string>) {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -16,10 +16,10 @@ export function useEpisodes() {
     let active = true;
     setLoading(true);
 
-    fetchEpisodes(page)
+    fetchEpisodes(page, filters)
       .then((data) => {
         if (!active) return;
-        setEpisodes((prev) => [...prev, ...data.results]); // append!
+        setEpisodes((prev) => [...prev, ...data.results]);
         setTotalPages(data.info.pages);
       })
       .catch((err: Error) => active && setError(err.message))
@@ -28,7 +28,7 @@ export function useEpisodes() {
     return () => {
       active = false;
     };
-  }, [page]);
+  }, [page, filters]);
 
   const loadMore = () => {
     if (page < totalPages) setPage((p) => p + 1);

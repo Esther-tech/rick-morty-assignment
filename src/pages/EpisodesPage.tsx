@@ -4,12 +4,17 @@ import { useState } from "react";
 import Modal from "../components/Modal";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useEpisode, useEpisodes } from "../hooks/useEpisodes";
+import { episodeFilterConfigs } from "../utils/filterConfig";
+import Filters from "../components/Filters";
 
 export default function EpisodesPage() {
-  const { episodes, loadMore, loading, error, page, totalPages } =
-    useEpisodes();
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const { episode, loading: detailLoading } = useEpisode(selectedId);
+
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [showFilters, setShowFilters] = useState(false);
+  const { episodes, loadMore, loading, error, page, totalPages } =
+    useEpisodes(filters);
 
   return (
     <div className="page">
@@ -17,6 +22,17 @@ export default function EpisodesPage() {
 
       {loading && <LoadingSpinner />}
       {error && <p className="error">{error}</p>}
+
+      <button
+        className="btn btn-toggle-filters"
+        onClick={() => setShowFilters((prev) => !prev)}
+      >
+        {showFilters ? "Hide Filters" : "Show Filters"}
+      </button>
+      {showFilters && (
+        <Filters configs={episodeFilterConfigs} onApply={setFilters} />
+      )}
+
       <div className="grid">
         {episodes.map((ep) => (
           <Card

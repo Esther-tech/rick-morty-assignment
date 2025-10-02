@@ -5,7 +5,7 @@ import {
   type Location,
 } from "../services/locationService";
 
-export function useLocations(page: number, type?: string, dimension?: string) {
+export function useLocations(page: number, filters?: Record<string, string>) {
   const [locations, setLocations] = useState<Location[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -16,23 +16,10 @@ export function useLocations(page: number, type?: string, dimension?: string) {
     setLoading(true);
     setError(null);
 
-    fetchLocations(page)
+    fetchLocations(page, filters)
       .then((data) => {
         if (active) {
-          let filtered = data.results;
-
-          if (type) {
-            filtered = filtered.filter((loc) =>
-              loc.type.toLowerCase().includes(type.toLowerCase())
-            );
-          }
-          if (dimension) {
-            filtered = filtered.filter((loc) =>
-              loc.dimension.toLowerCase().includes(dimension.toLowerCase())
-            );
-          }
-
-          setLocations(filtered);
+          setLocations(data.results);
           setTotalPages(data.info.pages);
         }
       })
@@ -46,7 +33,7 @@ export function useLocations(page: number, type?: string, dimension?: string) {
     return () => {
       active = false;
     };
-  }, [page, type, dimension]);
+  }, [page, filters]);
 
   return { locations, totalPages, loading, error };
 }
