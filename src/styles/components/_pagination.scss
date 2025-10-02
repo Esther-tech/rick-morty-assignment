@@ -11,6 +11,9 @@
 
   button,
   .load-more {
+    display: inline-flex;      
+    align-items: center;       
+    justify-content: center; 
     padding: 6px 14px;
     border: none;
     border-radius: 4px;

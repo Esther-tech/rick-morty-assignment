@@ -1,3 +1,6 @@
+import ArrowLeftIcon from "../assets/ArrowLeftIcon";
+import ArrowRightIcon from "../assets/ArrowRightIcon";
+
 type PaginationProps = {
   page: number;
   totalPages: number;
@@ -14,7 +17,7 @@ export default function Pagination({
   return (
     <div className="pagination">
       <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>
-        &lt;
+        <ArrowLeftIcon className="icon" />
       </button>
       <span>
         {page} of {totalPages}
@@ -23,7 +26,7 @@ export default function Pagination({
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
       >
-        &gt;
+        <ArrowRightIcon className="icon" />
       </button>
     </div>
   );

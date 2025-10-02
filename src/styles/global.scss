@@ -1,11 +1,7 @@
 
 @use 'base/variables' as *;
 @use 'base/mixins' as *;
-@use "components/loadingSpinner";
-@use "components/grid";
-@use "components/pagination";
-@use "components/modal";
-@use "components/filters";
+@use "components";
 
 * {
   margin: 0;
@@ -16,6 +12,7 @@
 html, body {
   height: 100%; 
   margin: 0;
+  padding: 0;
 }
 
 body {
@@ -34,29 +31,78 @@ header, footer {
   background-color: $color-dark;
   color: white;
   padding: 1rem;
+  position: sticky;
+  top: 0;       
+  z-index: 100;
+  margin-top: -3px;
 }
 
 nav {
   @include flex-center;
-  gap: 1rem;
+  justify-content: space-between;
+  position: relative;
+  width: max-content;
+  margin: auto;
 
-  a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    &:hover {
-      color: $color-secondary;
+  .nav-links {
+    @include flex-center;
+    gap: 1rem;
+
+    a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      &:hover {
+        color: $color-secondary;
+      }
     }
+  }
+
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
   }
 
   @include respond(sm) {
     flex-direction: column;
+    align-items: flex-start;
+    width: 100%;      
+    margin: 0;   
+
+    .nav-toggle {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      margin-top: 0.5rem;
+
+      a {
+        padding: 0.5rem 0;
+      }
+    }
+
+    &.open .nav-links {
+      display: flex;
+    }
   }
 }
 
 main {
   padding: 2rem;
   flex: 1;
+}
+
+.icon {
+  fill: $color-light;
+  width: 24px;
+  height: 24px;
 }
 
 
