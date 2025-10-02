@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { useCharacters } from "../hooks/useCharacters";
+import { useCharacter, useCharacters } from "../hooks/useCharacters";
 import Card from "../components/Card";
-import { type Character } from "../services/characterService";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Pagination from "../components/Pagination";
 import Modal from "../components/Modal";
+import { mapCharacterToCard } from "../utils/mapToCardData";
 
 export default function CharactersPage() {
   const [page, setPage] = useState(1);
   const { characters, totalPages, loading, error } = useCharacters(page);
-  const [selected, setSelected] = useState<Character | null>(null);
+
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const { character, loading: detailLoading } = useCharacter(selectedId);
 
   return (
     <div className="page">
@@ -20,12 +22,23 @@ export default function CharactersPage() {
 
       <div className="grid">
         {characters.map((c) => (
-          <Card key={c.id} data={c} onClick={setSelected} />
+          <Card
+            key={c.id}
+            data={mapCharacterToCard(c)}
+            onClick={() => setSelectedId(c.id)}
+          />
         ))}
       </div>
+
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
-      <Modal data={selected} onClose={() => setSelected(null)} />
+      {selectedId && (
+        <Modal
+          data={character}
+          onClose={() => setSelectedId(null)}
+          loading={detailLoading}
+        />
+      )}
     </div>
   );
 }

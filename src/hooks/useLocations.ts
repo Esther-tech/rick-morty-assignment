@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { fetchLocations, type Location } from "../services/locationService";
+import {
+  fetchLocation,
+  fetchLocations,
+  type Location,
+} from "../services/locationService";
 
 export function useLocations(page: number, type?: string, dimension?: string) {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -45,4 +49,32 @@ export function useLocations(page: number, type?: string, dimension?: string) {
   }, [page, type, dimension]);
 
   return { locations, totalPages, loading, error };
+}
+
+// detail hook
+export function useLocation(id: number | null) {
+  const [location, setLocation] = useState<Location | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    let active = true;
+    setLoading(true);
+    setError(null);
+
+    fetchLocation(id)
+      .then((data) => {
+        if (active) setLocation(data);
+      })
+      .catch((err: Error) => active && setError(err.message))
+      .finally(() => active && setLoading(false));
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  return { location, loading, error };
 }

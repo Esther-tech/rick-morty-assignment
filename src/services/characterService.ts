@@ -23,3 +23,10 @@ export async function fetchCharacters(page = 1): Promise<ApiResponse> {
   }
   return res.json();
 }
+
+export async function fetchCharacter(id: number): Promise<Character> {
+  const url = `https://rickandmortyapi.com/api/character/${id}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch character: ${res.status}`);
+  return res.json();
+}

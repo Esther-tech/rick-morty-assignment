@@ -19,3 +19,10 @@ export async function fetchLocations(page = 1): Promise<ApiResponse> {
   }
   return res.json();
 }
+
+export async function fetchLocation(id: number): Promise<Location> {
+  const url = `https://rickandmortyapi.com/api/location/${id}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch location: ${res.status}`);
+  return res.json();
+}
