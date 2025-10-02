@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# Rick & Morty assignment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dit project is een kleine React-applicatie waarmee gebruikers **characters, locations en episodes** uit de Rick & Morty API kunnen bekijken en filteren. 
 
-Currently, two official plugins are available:
+**Live demo:** [rick-morty-esther.netlify.app](https://rick-morty-esther.netlify.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Belangrijkste keuzes en implementatie
 
-## React Compiler
+### React Router & `<Outlet />`
+- Ik heb gebruikgemaakt van **React Router** met `<Outlet />` om nested routes schaalbaar te maken.
+- Dit is beter dan enkel losse routes, omdat het componenten consistent kan renderen binnen een layout, en makkelijker uitbreidbaar is als je later meer pagina’s of nested routes toevoegt.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Vite
+- Het project is opgezet met **Vite** voor snelle builds en development server.
+- Vite is sneller dan CRA omdat het ESModules gebruikt en on-demand bundling doet in development.
+- Ook maakt Vite het project compacter en eenvoudiger te configureren.
 
-## Expanding the ESLint configuration
+### RESTful API
+- Ik heb gekozen voor een **plain REST API** approach, zonder React Query of andere caching libraries.
+- Het is **eenvoudiger en schaalbaarder** in sommige productieomgevingen waar caching al op API-niveau geregeld is.
+- Het doel hier was demonstreren dat ik een **REST API kan integreren**, wat ook een criterium was in de vacature.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### SCSS
+- Styling is gedaan met **SCSS**.
+- In de vacature werd aangegeven dat ervaring met SCSS gewenst is.
+- Ik heb ook ervaring met Tailwind, maar SCSS bood hier de flexibiliteit voor bijvoorbeeld **nested styles en variabelen**.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Vitest
+- Voor unit tests heb ik **Vitest** gebruikt.
+- Reden: Vitest werkt uitstekend met Vite, is snel en lichtgewicht.
+- Ik heb tests toegevoegd voor de **mapping helpers (`mapToCardData`)**, inclusief error handling.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Filters
+- Filters zijn toegevoegd voor characters en locations.
+- Gebruikers kunnen filters toepassen en de lijst wordt dynamisch gefilterd via query parameters in de API.
+- Filters zijn optioneel te verbergen, zodat de UI overzichtelijk blijft.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Wat je kunt zien in de code
+- **Hooks**: `useCharacters`, `useCharacter`, `useLocations`, `useLocation` laten zien hoe API data opgevraagd en beheerd wordt.
+- **Mapping helpers**: `mapToCardData` transformeert API-data naar een formaat dat geschikt is voor kaarten.
+- **Reusable components**: `Card`, `Modal`, `Pagination`, `Filters`.
+- **Schaalbare routing** met `<Outlet />`.
+- **SCSS structuur** met nested styles, variabelen en modulaire aanpak.
+- **Unit tests** met Vitest, inclusief error scenarios.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Bonus
+- Error handling in mapping functies resulteert in een “Something went wrong”-kaart in de UI als iets onverwachts gebeurt.
+- Filters kunnen eenvoudig uitgebreid worden naar nieuwe types of parameters dankzij een **dynamische filter configuratie**.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
